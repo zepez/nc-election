@@ -4,12 +4,15 @@ from bs4 import BeautifulSoup
 import json
 import requests
 from datetime import datetime
+import hashlib
 
 
 
 class Race:
     def __init__(self, race, age, candidates):
-        self.id = race
+        # generate id hash from race
+        # allows recieving server to check if they want to create or update
+        self.id = hashlib.sha256(str.encode(race)).hexdigest()[0:18]
         self.race = race
         self.reporting = age
         self.candidates = candidates
@@ -21,10 +24,11 @@ class Race:
     
     def json(self):
         return json.dumps(self.__dict__)
-    
+
+
+
 
 def send_data(race):
-    print(race.json())
     x = requests.post("http://localhost:3001/rail/test", data = race.json(), headers = {'Content-Type': 'application/json', 'Accept-Encoding': 'UTF-8'})
     print(x.status_code)
 
