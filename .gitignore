@@ -1,6 +1,5 @@
 # python gitignore from https://github.com/github/gitignore/blob/master/Python.gitignore
 
-exmpale.png
 lib
 bin
 

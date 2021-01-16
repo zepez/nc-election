@@ -78,8 +78,6 @@ async def main():
     # new page and go to location
     page = await browser.newPage()
     await page.goto('https://er.ncsbe.gov/?election_dt=11/03/2020&county_id=0&office=FED&contest=0')
-    # take a screenshot (probably remove)
-    await page.screenshot({'path': 'example.png'})
 
 	# get the entire page for parsing
     response = await page.evaluate('''() => {
