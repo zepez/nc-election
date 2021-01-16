@@ -2,19 +2,31 @@ import asyncio
 from pyppeteer import launch
 from bs4 import BeautifulSoup
 import json
+import requests
+from datetime import datetime
+
 
 
 class Race:
     def __init__(self, race, age, candidates):
+        self.id = race
         self.race = race
         self.reporting = age
         self.candidates = candidates
+        self.created_at = datetime.now().isoformat()
+        self.updated_at = datetime.now().isoformat()
         
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
     
     def json(self):
-        return json.dumps(str(self.__dict__))
+        return json.dumps(self.__dict__)
+    
+
+def send_data(race):
+    print(race.json())
+    x = requests.post("http://localhost:3001/rail/test", data = race.json(), headers = {'Content-Type': 'application/json', 'Accept-Encoding': 'UTF-8'})
+    print(x.status_code)
 
 
 def scrape_data(html):
@@ -52,9 +64,9 @@ def scrape_data(html):
             
 
         race = Race(race, reporting, candidates)
-        print(race.json(), "\n")
+        send_data(race)
 
-# https://er.ncsbe.gov/?election_dt=11/03/2020&county_id=6&office=ALL&contest=1
+
 
 async def main():
     #launch browser
