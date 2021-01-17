@@ -5,13 +5,16 @@ import os
 import json
 
 os.environ['pages'] = '["https://er.ncsbe.gov/?election_dt=11/03/2020&county_id=0&office=FED&contest=0", "https://er.ncsbe.gov/?election_dt=11/03/2020&county_id=0&office=CCL&contest=0"]'
-os.environ['endpoint'] = ''
+os.environ['endpoint'] = 'http://localhost:3001/rail/test'
 os.environ['cron'] = '* * * * *'
+os.environ['headless'] = 'false'
 
 
 async def main():
     #launch browser
-    browser = await launch({"headless": False})
+    # checks env to know if headless
+    # yes, true, t, 1 all eval to True. Otherwise false
+    browser = await launch({"headless": os.environ.get('headless').lower() in ("yes", "true", "t", "1")})
     
     for page_to_scrape in json.loads(os.environ.get('pages')):
         # new page and go to location
